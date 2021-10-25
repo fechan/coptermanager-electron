@@ -18,4 +18,4 @@ document.getElementById("throttle-down").onclick = () => window.copter.changeThr
 
 window.copter.receive("log", (event, data) => {
   document.getElementById("log").innerHTML += data + "\n";
-})
+});

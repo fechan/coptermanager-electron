@@ -17,7 +17,11 @@ function sendNextSerialMessage() {
   if (serialMessageQueue.length > 0) {
     let message = serialMessageQueue.shift();
     serial.write(message);
-    win.webContents.send("log", `Sent command ${message.toString("hex")}`);
+    try {
+      win.webContents.send("log", `Sent command ${message.toString("hex")}`);
+    } catch (e) {
+      console.error(e);
+    }
     expectingResponse = true;
   }
 }
@@ -45,8 +49,12 @@ function changeThrottle(delta) {
   })
 }
 
-function disconnectCopter() {
+function disconnectCopter(closeApplication) {
   enqueueSerialMessage(currentCopter.disconnectCopterCommand());
+  serial.once("data", (data) => {
+    currentCopter = null;
+    if (closeApplication) app.quit();
+  })
 }
 
 /**
@@ -66,14 +74,18 @@ const createWindow = () => {
 
 app.allowRendererProcessReuse = false;
 app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
+  if (process.platform !== "darwin") disconnectCopter(true);
 });
 app.whenReady().then(() => {
   createWindow();
 
   serial.on("data", (data) => {
     expectingResponse = false;
-    win.webContents.send("log", `Received data ${data.toString("hex")}`);
+    try {
+      win.webContents.send("log", `Received data ${data.toString("hex")}`);
+    } catch (e) {
+      console.error(e);
+    }
     sendNextSerialMessage();
   });
 
