@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <title>Hubsan X4 Controller Application</title>
+  </head>
+  <body>
+    <h1>Hubsan X4 Controller Application</h1>
+    <button id="bind">Bind</button>
+    <button id="throttle-up">Throttle up</button>
+    <button id="throttle-down">Throttle down</button>
+    <hr>
+    <textarea readonly id="log" rows="100"></textarea>
+    <script src="index.js"></script>
+</html>
