@@ -6,7 +6,8 @@ const COMMAND_CODES = {
   THROTTLE: 0x02,
   RUDDER: 0x03,
   AILERON: 0x04,
-  ELEVATOR: 0x05
+  ELEVATOR: 0x05,
+  DISCONNECT: 0x0B
 }
 
 const COMMAND_RANGES = {
@@ -61,6 +62,10 @@ class Copter {
     let range = COMMAND_RANGES[command];
     let newMotion = Math.max(Math.min(this.motion[command] + delta, range[1]), range[0]);
     return this.rawCommand(command, newMotion);
+  }
+  
+  disconnectCopterCommand() {
+    return this.rawCommand(COMMAND_CODES.DISCONNECT, 0x00);
   }
   
   /**

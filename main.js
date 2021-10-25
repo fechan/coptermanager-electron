@@ -45,6 +45,10 @@ function changeThrottle(delta) {
   })
 }
 
+function disconnectCopter() {
+  enqueueSerialMessage(currentCopter.disconnectCopterCommand());
+}
+
 /**
  * Start Electron
  */
@@ -87,4 +91,8 @@ ipcMain.on("bind-copter", (event, args) => {
 
 ipcMain.on("change-throttle", (event, delta) => {
   changeThrottle(delta);
+});
+
+ipcMain.on("disconnect-copter", (event, args) => {
+  disconnectCopter();
 });
