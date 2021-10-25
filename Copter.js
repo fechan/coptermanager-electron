@@ -1,3 +1,6 @@
+/**
+ * Coptermanager command codes
+ */
 const COMMAND_CODES = {
   BIND: 0x01,
   THROTTLE: 0x02,
