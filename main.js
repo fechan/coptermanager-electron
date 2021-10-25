@@ -40,6 +40,7 @@ function bindCopter() {
 function changeThrottle(delta) {
   enqueueSerialMessage(currentCopter.changeMotionCommand(Copter.COMMAND_CODES.THROTTLE, delta));
   serial.once("data", (data) => {
+    //TODO: what happens when there's an error?
     currentCopter.commitMotion(Copter.COMMAND_CODES.THROTTLE, delta);
   })
 }
