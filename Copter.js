@@ -28,16 +28,18 @@ function bindCopterCommand() {
 
 class Copter {
   /**
-   * Create an object representing a quadricopter and its motion
+   * Create an quadricopter model object representing a quadricopter and its motion.
+   * This keeps track of how the software thinks the real quadricopter is moving,
+   * based on the results of all the commitMotion() calls in its lifetime.
    * @param {Number} copterId Copter ID
    */
   constructor(copterId) {
     this.copterId = copterId;
-    this.motion = { // set throttle, aileron, etc. to 0
-      0x02: 0x00,
-      0x03: 0x00,
-      0x04: 0x00,
-      0x05: 0x00
+    this.motion = { // set throttle, aileron, etc. to stationary
+      0x02: COMMAND_RANGES[0x02][0],
+      0x03: Math.floor((COMMAND_RANGES[0x03][0] + COMMAND_RANGES[0x03][1]) / 2),
+      0x04: Math.floor((COMMAND_RANGES[0x04][0] + COMMAND_RANGES[0x04][1]) / 2),
+      0x05: Math.floor((COMMAND_RANGES[0x05][0] + COMMAND_RANGES[0x05][1]) / 2)
     }
   }
 
@@ -63,19 +65,30 @@ class Copter {
     let newMotion = Math.max(Math.min(this.motion[command] + delta, range[1]), range[0]);
     return this.rawCommand(command, newMotion);
   }
+
+  setMotionCommand(command, value) {
+    let range = COMMAND_RANGES[command];
+    let newMotion = Math.max(Math.min(value, range[1]), range[0]);
+    return this.rawCommand(command, newMotion);
+  }
   
   disconnectCopterCommand() {
     return this.rawCommand(COMMAND_CODES.DISCONNECT, 0x00);
   }
   
   /**
-   * Set the quadricopter's motion to a specific value
+   * Change the motion of the software model quadricopter (not the actual quadricopter) by a delta
    * @param {Number} command Command code (from COMMAND_CODES)
    * @param {Number} delta Change in motion value
    */
-  commitMotion(command, delta) {
+  commitChangeMotion(command, delta) {
     let range = COMMAND_RANGES[command];
     this.motion[command] = Math.max(Math.min(this.motion[command] + delta, range[1]), range[0]);
+  }
+
+  commitSetMotion(command, value) {
+    let range = COMMAND_RANGES[command];
+    this.motion[command] = Math.max(Math.min(value, range[1]), range[0]);
   }
 }
 

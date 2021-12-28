@@ -41,11 +41,18 @@ function bindCopter() {
   })
 }
 
-function changeThrottle(delta) {
-  enqueueSerialMessage(currentCopter.changeMotionCommand(Copter.COMMAND_CODES.THROTTLE, delta));
+function changeMotion(motionType, delta) {
+  enqueueSerialMessage(currentCopter.changeMotionCommand(Copter.COMMAND_CODES[motionType], delta));
   serial.once("data", (data) => {
     //TODO: what happens when there's an error?
-    currentCopter.commitMotion(Copter.COMMAND_CODES.THROTTLE, delta);
+    currentCopter.commitChangeMotion(Copter.COMMAND_CODES.THROTTLE, delta);
+  })
+}
+
+function setMotion(motionType, value) {
+  enqueueSerialMessage(currentCopter.setMotionCommand(Copter.COMMAND_CODES[motionType], value));
+  serial.once("data", (data) => {
+    currentCopter.commitSetMotion(Copter.COMMAND_CODES[motionType], value);
   })
 }
 
@@ -101,8 +108,12 @@ ipcMain.on("bind-copter", (event, args) => {
   bindCopter();
 });
 
-ipcMain.on("change-throttle", (event, delta) => {
-  changeThrottle(delta);
+ipcMain.on("change-motion", (event, motionType, delta) => {
+  changeMotion(motionType, delta);
+});
+
+ipcMain.on("set-motion", (event, motionType, value) => {
+  setMotion(motionType, value);
 });
 
 ipcMain.on("disconnect-copter", (event, args) => {
