@@ -90,6 +90,7 @@ app.whenReady().then(() => {
     expectingResponse = false;
     try {
       win.webContents.send("log", `Received data ${data.toString("hex")}`);
+      win.webContents.send("copterState", currentCopter);
     } catch (e) {
       console.error(e);
     }

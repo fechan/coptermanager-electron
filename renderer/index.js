@@ -56,3 +56,10 @@ window.copter.receive("log", (event, data) => {
     bound = true;
   }
 });
+
+window.copter.receive("copterState", (event, data) => {
+  document.getElementById("throttle").innerHTML = data.motion[0x02];
+  document.getElementById("rudder").innerHTML = data.motion[0x03];
+  document.getElementById("aileron").innerHTML = data.motion[0x04];
+  document.getElementById("elevator").innerHTML = data.motion[0x05];
+});
