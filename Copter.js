@@ -55,7 +55,7 @@ class Copter {
   }
 
   /**
-   * Get the serial message buffer for changing the quadricopter's motion
+   * Get the serial message buffer for changing the quadricopter's motion by a delta
    * @param {Number} command Command code (from COMMAND_CODES)
    * @param {Number} delta Change in motion value
    * @returns {Buffer} Serial message buffer
@@ -65,13 +65,23 @@ class Copter {
     let newMotion = Math.max(Math.min(this.motion[command] + delta, range[1]), range[0]);
     return this.rawCommand(command, newMotion);
   }
-
+  
+  /**
+   * Get the serial message buffer for setting a value of the quadricopter's motion
+   * @param {*} command Command code (from COMMAND_CODES)
+   * @param {*} value Change in motion value
+   * @returns {Buffer} Serial message buffer
+   */
   setMotionCommand(command, value) {
     let range = COMMAND_RANGES[command];
     let newMotion = Math.max(Math.min(value, range[1]), range[0]);
     return this.rawCommand(command, newMotion);
   }
   
+  /**
+   * Get the serial message buffer for disconnecting the quadricopter
+   * @returns {Buffer} Serial message buffer
+   */
   disconnectCopterCommand() {
     return this.rawCommand(COMMAND_CODES.DISCONNECT, 0x00);
   }
@@ -86,6 +96,11 @@ class Copter {
     this.motion[command] = Math.max(Math.min(this.motion[command] + delta, range[1]), range[0]);
   }
 
+  /**
+   * Set the motion of the software model quadricopter (not the actual quadricopter) to a value
+   * @param {*} command Command code (from COMMAND_CODES)
+   * @param {*} value Value to set motion to
+   */
   commitSetMotion(command, value) {
     let range = COMMAND_RANGES[command];
     this.motion[command] = Math.max(Math.min(value, range[1]), range[0]);
