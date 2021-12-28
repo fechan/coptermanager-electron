@@ -34,7 +34,7 @@ function controllerLoop() {
   let gamepad = gamepads[0];
   if (bound) {
     window.copter.setMotion("RUDDER", scale(-gamepad.axes[0], -1, 1, COMMAND_RANGES.RUDDER[0], COMMAND_RANGES.RUDDER[1]) | 0);
-    window.copter.changeMotion("THROTTLE", (-gamepad.axes[1] * 0xFF) | 0);
+    window.copter.changeMotion("THROTTLE", (-gamepad.axes[1] * COMMAND_RANGES.THROTTLE[1]) | 0);
     window.copter.setMotion("AILERON", scale(-gamepad.axes[2], -1, 1, COMMAND_RANGES.AILERON[0], COMMAND_RANGES.AILERON[1]) | 0);
     window.copter.setMotion("ELEVATOR", scale(-gamepad.axes[3], -1, 1, COMMAND_RANGES.ELEVATOR[0], COMMAND_RANGES.ELEVATOR[1]) | 0);
   }
