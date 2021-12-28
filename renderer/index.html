@@ -13,11 +13,25 @@
     <button id="disconnect">Disconnect</button>
     <button id="throttle-up">Throttle up</button>
     <button id="throttle-down">Throttle down</button>
+    <button id="start-recording">Start recording</button>
+    <button id="stop-recording">Stop recording</button>
+    <button id="start-playback">Start playback</button>
     <table>
       <tr><td>Throttle</td><td id="throttle"></td></tr>
       <tr><td>Rudder</td><td id="rudder"></td></tr>
       <tr><td>Aileron</td><td id="aileron"></td></tr>
       <tr><td>Elevator</td><td id="elevator"></td></tr>
+    </table>
+    <hr>
+    <table>
+      <thead>
+        <tr>
+          <th>Time (ms)</th>
+          <th>Motion</th>
+        </tr>
+      </thead>
+      <tbody id="recording">
+      </tbody>
     </table>
     <hr>
     <textarea readonly id="log" rows="50" cols="200"></textarea>

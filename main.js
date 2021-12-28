@@ -3,6 +3,7 @@ const SerialPort = require("serialport");
 const Copter = require("./Copter.js");
 
 const serial = new SerialPort("/dev/ttyACM0", {baudRate: 115200});
+serial.setMaxListeners(20);
 
 let win;
 
@@ -38,6 +39,7 @@ function bindCopter() {
   serial.once("data", (data) => {
     let copterId = data.readUInt8(1);
     currentCopter = new Copter.Copter(copterId);
+    win.webContents.send("copterState", currentCopter);
   })
 }
 
